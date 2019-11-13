@@ -46,7 +46,7 @@ In the jsonbox.io dashboard, append **/twitter** to the URL, and set the request
 ```
 
 ![jsonbox.io dashboard](docs/jsonbox-create.png)
-box_XXXXXXXXXXXXXXXXX
+
 ### Using cURL
 
 Of course, you can do this with cURL on the command-line right now:

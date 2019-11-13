@@ -37,7 +37,7 @@ Head to `https://jsonbox.io/dashboard.html?box=box_XXXXXXXXXXXXXXXXXXXX`.
 
 Say you want to redirect **https://url-shortener.yourname.now.sh/twitter** to **https://twitter.com/yourname**.
 
-In the jsonbox.io dashboard, append **/twitter** to the URL, and set the request body to:
+In the jsonbox.io dashboard, set the method to "POST", append **/twitter** to the URL, and set the request body to:
 
 ```
 {

@@ -1,5 +1,8 @@
 {
+  "env": {
+    "urlshortener_jsonbox": "@urlshortener_jsonbox"
+  },
   "routes": [
-    { "src": "^[^/]*$", "dest": "/api/redirect.js" }
+    { "src": "^/?[^/]*$", "dest": "/api/redirect.js" }
   ]
 }

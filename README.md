@@ -57,6 +57,10 @@ curl https://jsonbox.io/box_XXXXXXXXXXXXXXXXXXXX/twitter \
      --data-binary '{"dest": "https://twitter.com/yourname"}'
 ```
 
+## Default redirect
+
+If you go to the base URL of your URL Shortener (i.e.  https://url-shortener.yourname.now.sh/), this system will look for a shortcode of `__default__`. Creating a record at **https://jsonbox.io/box\_XXXXXXXXXXXXXXXXXXXX/\_\_default\_\_** will let you set the destination for this scenario.
+
 ## Redirect history
 
 When you post a new destination for a given source to jsonbox.io, the data is appended to a list. When this script retrieves the list, it uses the latest destination. This means the history of destinations is maintained and, simply by POSTing a new destination to jsonbox.io, it's always possible to set a new destination.

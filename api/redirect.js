@@ -14,7 +14,7 @@ module.exports = (req, res) => {
   request(url, { json: true }, (jb_err, jb_res, jb_body) => {
 
     // If JSON Box has a response
-    if(jb_body.length>1) {
+    if(jb_body.length>0) {
 
       // And the response has a destination
       if('dest' in jb_body[0]) {

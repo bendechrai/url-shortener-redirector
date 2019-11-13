@@ -56,3 +56,7 @@ curl https://jsonbox.io/box_XXXXXXXXXXXXXXXXXXXX/twitter \
      -H 'content-type: application/json' \
      --data-binary '{"dest": "https://twitter.com/yourname"}'
 ```
+
+## Redirect history
+
+When you post a new destination for a given source to jsonbox.io, the data is appended to a list. When this script retrieves the list, it uses the latest destination. This means the history of destinations is maintained and, simply by POSTing a new destination to jsonbox.io, it's always possible to set a new destination.

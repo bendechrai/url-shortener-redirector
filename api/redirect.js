@@ -18,7 +18,7 @@ module.exports = (req, res) => {
 
       // And the response has a destination
       if('dest' in jb_body[0]) {
-        res.writeHead(302, {"Location": jb_body[0].dest})
+        res.writeHead(301, {"Location": jb_body[0].dest})
         res.end()
 
       // No destination? Nothing to do

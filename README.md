@@ -29,7 +29,15 @@ now --prod
 
 ## Managing redirects
 
-***WIP*** A command-line utility is coming. For now, you can do this manually.
+## Import
+
+Already have shortcuts in mind? Migrating from another system? Create an import.csv file in the `/tools/` directory, and run the import script (tested on Linux). Pass the jsonbox ID in via the command line thus:
+
+```
+BOXID=box_xxxxxxxxxxxxxxxxxxxx ./import.sh 
+```
+
+### Manual management
 
 Head to `https://jsonbox.io/dashboard.html?box=box_XXXXXXXXXXXXXXXXXXXX`.
 

@@ -1,34 +1,35 @@
 var request = require('request')
 
-module.exports = (req, res) => {
+module.exports = (userRequest, userResponse) => {
 
   // Get the URL and strip any slashes
-  let url = req.url
-  url = url.replace('/', '')
+  let shortcode = userRequest.url
+  shortcode = shortcode.replace('/', '')
 
   // If URL is blank, we want the default redirect
-  if(url=='') url='__default__'
+  if (shortcode=='') shortcode='__default__'
 
   // Load data from JSON Box
-  url = 'https://jsonbox.io/' + process.env.urlshortener_jsonbox + '/' + url
-  request(url, { json: true }, (jb_err, jb_res, jb_body) => {
+  jsonbox_fetch_url = 'https://jsonbox.io/' + process.env.urlshortener_jsonbox + '/' + shortcode
+  request(jsonbox_fetch_url, { json: true }, (jsonbox_fetch_err, jsonbox_fetch_res, jsonbox_fetch_body) => {
 
     // If JSON Box has a response
-    if(jb_body.length>0) {
+    if (jsonbox_fetch_body.length>0) {
 
       // And the response has a destination
-      if('dest' in jb_body[0]) {
-        res.writeHead(301, {"Location": jb_body[0].dest})
-        res.end()
+      if ('dest' in jsonbox_fetch_body[0]) {
+            // Redirect
+            userResponse.writeHead(301, {"Location": jsonbox_fetch_body[0].dest})
+            userResponse.end()
 
       // No destination? Nothing to do
       } else {
-        res.send('Not found')
+        userResponse.send('Not found')
       }
 
     // No response? Nothing to do
     } else {
-      res.send('Not found')
+      userResponse.send('Not found')
     }
   });
 

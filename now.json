@@ -1,6 +1,7 @@
 {
   "env": {
-    "urlshortener_jsonbox": "@urlshortener_jsonbox"
+    "urlshortener_jsonbox": "@urlshortener_jsonbox",
+    "ipgeolocation_apikey": "@ipgeolocation_apikey"
   },
   "routes": [
     { "src": "^/?[^/]*$", "dest": "/api/redirect.js" }

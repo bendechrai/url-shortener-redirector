@@ -4,7 +4,7 @@
 
 ### Zeit account
 
-Sign up for a Zeit account if you don't have one already, and install the `now` command-line utilities.
+Sign up for a [Zeit](https://zeit.co) account if you don't have one already, and install the `now` command-line utilities.
 
 ### jsonbox.io account
 
@@ -16,6 +16,10 @@ The X's will be a unique code for you to use to connect to the jsonbox API.
 
 ***Don't lose this!*** You'll need it for the next step, and also for the future when you need to manage your redirects.
 
+### IPGeolocation account
+
+Sign up for an [IP Geolocation](https://ipgeolocation.io/) account, and grab the API key - you'll need it in the next step.
+
 ### Clone and deploy!
 
 Now run the following in your terminal:
@@ -23,7 +27,8 @@ Now run the following in your terminal:
 ```
 git clone https://github.com/bendechrai/url-shortener.git
 cd url-shortener
-now secret add urlshortener_jsonbox box_XXXXXXXXXXXXXXXXXXXX
+now secret add urlshortener_jsonbox <box_XXXXXXXXXXXXXXXXXXXX>
+now secret add ipgeolocation_apikey <XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX>
 now --prod
 ```
 

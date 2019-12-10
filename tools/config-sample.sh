@@ -1,0 +1,3 @@
+#!/bin/bash
+
+BOXID=box_XXXXXXXXXXXXXXXXXXXX

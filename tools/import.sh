@@ -1,11 +1,6 @@
 #!/bin/bash
 
-# Make sure a BOXID is passed in to the script
-if [[ -z $BOXID ]]
-then
-  echo "Usage: $0 [jsonboxio_boxid]"
-  exit;
-fi
+source config.sh
 
 # Loop through each import enrty
 ENTRIES=`cat import.csv`

@@ -2,7 +2,8 @@
   "name": "url-shortener",
   "version": "1.0.0",
   "dependencies": {
-    "request": "^2.88.0"
+    "faunadb": "^2.13.1",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {},
   "repository": {

@@ -1,65 +1,57 @@
-var request = require('request')
+import faunadb, { query as q } from "faunadb";
+import fetch from "node-fetch";
 
-module.exports = (userRequest, userResponse) => {
+const getClickInfo = async (data, userRequest) => {
+  // Fetch info based on IP address
+  const iplookup_url =
+    "https://api.ipgeolocation.io/ipgeo?apiKey=" +
+    process.env.ipgeolocation_apikey +
+    "&ip=" +
+    userRequest.headers["x-forwarded-for"];
+  const userinfo = await fetch(iplookup_url).then(res => res.json());
 
-  // Get the URL and strip any slashes
-  let shortcode = userRequest.url
-  shortcode = shortcode.replace('/', '')
+  // Build default log message
+  return {
+    shortcode: data.shortcode,
+    referrer: userRequest.headers["referer"],
+    useragent: userRequest.headers["user-agent"],
+    ipaddress: userRequest.headers["x-forwarded-for"],
+    timestamp: new Date().toISOString(),
+    userinfo: userinfo
+  };
+};
 
-  // If URL is blank, we want the default redirect
-  if (shortcode=='') shortcode='__default__'
+const Redirect = async (userRequest, userResponse) => {
+  const { FAUNADB_SECRET: faunadb_secret } = process.env;
+  const shortcode = userRequest.url.replace("/", "") || "__default__";
+  const client = new faunadb.Client({ secret: faunadb_secret });
 
-  // Load data from JSON Box
-  jsonbox_fetch_url = 'https://jsonbox.io/' + process.env.urlshortener_jsonbox + '/' + shortcode
-  request(jsonbox_fetch_url, { json: true }, (jsonbox_fetch_err, jsonbox_fetch_res, jsonbox_fetch_body) => {
+  const redirectInfo = await client
+    .query(q.Paginate(q.Match(q.Ref("indexes/all_redirects"), shortcode)))
+    .then(response => {
+      const redirectRefs = response.data;
+      const getAllRedirectDataQuery = redirectRefs.map(ref => {
+        return q.Get(ref);
+      });
+      return client.query(getAllRedirectDataQuery);
+    })
+    .catch(error => userResponse.send("Not found"));
 
-    // If JSON Box has a response
-    if (jsonbox_fetch_body.length>0) {
+  if (redirectInfo.length != 1 || !redirectInfo[0].data.dest) {
+    // Too much, not enough, or invalid data
+    userResponse.send("Not found");
+  } else {
+    // Log the click
+    const info = await getClickInfo(redirectInfo[0].data, userRequest);
+    const logged = await client.query(
+      q.Create(q.Collection("clicks"), { data: info })
+    );
 
-      // And the response has a destination
-      if ('dest' in jsonbox_fetch_body[0]) {
+    // Redirect user to dest
+    userResponse.writeHead(301, { Location: redirectInfo[0].data.dest });
+  }
 
-        // Get info about the user's IP address
-        let iplookup_url = 'https://api.ipgeolocation.io/ipgeo?apiKey=' + process.env.ipgeolocation_apikey + '&ip='  + userRequest.headers['x-forwarded-for']
-        request(iplookup_url, {}, (iplookup_err, iplookup_res, iplookup_body) => {
+  userResponse.end();
+};
 
-          // Build default log message
-          let logdata = {
-            shortcode: shortcode,
-            referrer: userRequest.headers['referer'],
-            user_agent: userRequest.headers['user-agent'],
-            ip_address: userRequest.headers['x-forwarded-for'],
-            click_time: new Date().toISOString()
-          }
-
-          // If info available
-          if (iplookup_res.statusCode == 200) {
-            logdata.userinfo = JSON.parse(iplookup_body)
-          }
-
-          // Log the request
-          jsonbox_log_url = 'https://jsonbox.io/' + process.env.urlshortener_jsonbox + '/__log__'
-          request.post(jsonbox_log_url, {json: true, body: logdata}, (jsonbox_log_err, jsonbox_log_res, jsonbox_log_body) => {
-
-            // Redirect
-            userResponse.writeHead(301, {"Location": jsonbox_fetch_body[0].dest})
-            userResponse.end()
-
-          })
-
-        })
-
-
-      // No destination? Nothing to do
-      } else {
-        userResponse.send('Not found')
-      }
-
-    // No response? Nothing to do
-    } else {
-      userResponse.send('Not found')
-    }
-
-  });
-
-}
+export default Redirect;

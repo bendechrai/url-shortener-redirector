@@ -26,7 +26,8 @@ now --prod
 1. [Create a new Fauna Database](https://dashboard.fauna.com/db-new/) called `url-shortener`;
 1. Add the [Fauna Integration](https://zeit.co/integrations/faunadb) into your Zeit account;
 1. Create a new [Fauna Database Server Key](https://dashboard.fauna.com/keys-new/@db/url-shortener) for your new database and copy the key;
-1. Create two collections in the database, called `redirects` and `clicks`; and
+1. Create two collections in the database, called `redirects` and `clicks`; 
+1. In the `redirects` collection, create an index called `all_redirects`, set the Terms field to`shortcode`d; and
 1. Paste this key into Zeit's Fauna Integration setup when prompted, and link the Fauna database with the new Zeit project created during deployment.
 
 ## Managing redirects
